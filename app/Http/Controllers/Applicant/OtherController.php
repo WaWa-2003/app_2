@@ -13,14 +13,17 @@ class OtherController extends Controller
         $user_id = auth()->user()->id;
         $others = Other::where('user_id', $user_id)->get();
 
-        return view('applicant.other.index', [
+        return view('applicant.index', [
             'others' => $others
         ]);
+        // return view('applicant.other.index', [
+        //     'others' => $others
+        // ]);
     }
 
     public function create()
     {
-        return view('applicant.other.index');
+        return view('applicant.index');
     }
 
     public function store(Request $request)
@@ -47,7 +50,7 @@ class OtherController extends Controller
             ]);
         }
 
-        return redirect()->route('others.index')->with('success', 'Other record(s) created successfully.');
+        return redirect()->route('applicant.index')->with('successOther', 'Other record(s) created successfully.');
     }
 
     public function show($id)
@@ -55,7 +58,7 @@ class OtherController extends Controller
         $user_id = auth()->user()->id;
         $others = Other::where('user_id', $user_id)->get();
 
-        return view('applicant.other.index', [
+        return view('applicant.index', [
             'others' => $others
         ]);
     }
@@ -97,14 +100,13 @@ class OtherController extends Controller
                 ]);
             }
         }
-        return redirect()->route('others.index')->with('success', 'Other record(s) updated successfully.');
+        return redirect()->route('applicant.index')->with('successOther', 'Other record(s) updated successfully.');
     }
 
-    public function destroy($id)
-    {
-        $other = Other::findOrFail($id);
-        $other->delete();
-
-        return redirect()->route('others.index')->with('success', 'Other record deleted successfully.');
-    }
+    // public function destroy($id)
+    // {
+    //     $other = Other::findOrFail($id);
+    //     $other->delete();
+    //     return redirect()->route('others.index')->with('successOther', 'Other record deleted successfully.');
+    // }
 }

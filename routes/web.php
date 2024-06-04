@@ -58,9 +58,9 @@ Route::resource('jobs', JobController::class);
 Route::resource('educations', EducationController::class);
 Route::resource('others', OtherController::class);
 
-Route::get('/professional-information', function () {
-    return view('applicant.index');
-});
+// Route::get('/professional-information', function () {
+//     return view('applicant.index');
+// });
 
 
 Route::get('/professional-information', [ProfessionalInformationController::class, 'index'])->name('applicant.index');

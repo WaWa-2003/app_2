@@ -86,7 +86,7 @@
         <!-- Description -->
         <div>
             <x-input-label for="description" :value="__('Description')" />
-            <textarea id="description" name="description" class="mt-1 block w-full" placeholder="Description" required></textarea>
+            <x-textarea-input id="description" name="description" class="mt-1 block w-full" placeholder="Description" required></x-textarea-input>
             <x-input-error class="mt-2" :messages="$errors->get('description')" />
         </div>
 
@@ -95,7 +95,7 @@
             <x-input-label for="requirements" :value="__('Requirements')" />
             <div id="requirements-container" class="space-y-2">
                 <div class="input-group flex items-center">
-                    <input type="text" name="requirements[]" class="form-control w-full mt-1" placeholder="Requirement" required>
+                    <x-text-input type="text" name="requirements[]" class="form-control w-full mt-1" placeholder="Requirement" required />
                     <button id="remove-requirement" type="button" class="btn btn-danger ml-2">Remove</button>
                 </div>
             </div>
@@ -107,7 +107,7 @@
             <x-input-label for="qualifications" :value="__('Qualifications')" />
             <div id="qualifications-container" class="space-y-2">
                 <div class="input-group flex items-center">
-                    <input type="text" name="qualifications[]" class="form-control w-full mt-1" placeholder="Qualifications" required>
+                    <x-text-input type="text" name="qualifications[]" class="form-control w-full mt-1" placeholder="Qualifications" required />
                     <button id="remove-qualification" type="button" class="btn btn-danger ml-2">Remove</button>
                 </div>
             </div>
@@ -119,7 +119,7 @@
             <x-input-label for="employer_questions" :value="__('Employer Questions')" />
             <div id="employer_questions-container" class="space-y-2">
                 <div class="input-group flex items-center">
-                    <input type="text" name="employer_questions[]" class="form-control w-full mt-1" placeholder="Employer Questions" required>
+                    <x-text-input type="text" name="employer_questions[]" class="form-control w-full mt-1" placeholder="Employer Questions" required />
                     <button id="remove-employer_questions" type="button" class="btn btn-danger ml-2">Remove</button>
                 </div>
             </div>
@@ -175,7 +175,7 @@
         var container = document.getElementById('requirements-container');
         var newRequirement = document.createElement('div');
         newRequirement.classList.add('input-group', 'flex', 'items-center', 'mt-2');
-        newRequirement.innerHTML = '<input type="text" name="requirements[]" class="form-control w-full" placeholder="Requirement" required>' +
+        newRequirement.innerHTML = '<x-text-input type="text" name="requirements[]" class="form-control w-full" placeholder="Requirement" required />' +
             '<button id="remove-requirement" type="button" class="btn btn-danger ml-2">Remove</button>';
         container.appendChild(newRequirement);
     });
@@ -191,7 +191,7 @@
         var container = document.getElementById('qualifications-container');
         var newQualification = document.createElement('div');
         newQualification.classList.add('input-group', 'flex', 'items-center', 'mt-2');
-        newQualification.innerHTML = '<input type="text" name="qualifications[]" class="form-control w-full" placeholder="Qualification" required>' +
+        newQualification.innerHTML = '<x-text-input type="text" name="qualifications[]" class="form-control w-full" placeholder="Qualification" required />' +
                                     '<button id="remove-qualification" type="button" class="btn btn-danger ml-2">Remove</button>' ;
         container.appendChild(newQualification);
     });
@@ -202,12 +202,11 @@
         }
     });
 
-
     document.getElementById('add-employer_questions').addEventListener('click', function() {
         var container = document.getElementById('employer_questions-container');
         var newEmployerQuestions = document.createElement('div');
         newEmployerQuestions.classList.add('input-group', 'flex', 'items-center', 'mt-2');
-        newEmployerQuestions.innerHTML = '<input type="text" name="employer_questions[]" class="form-control w-full" placeholder="Employer Questions" required>' +
+        newEmployerQuestions.innerHTML = '<x-text-input type="text" name="employer_questions[]" class="form-control w-full" placeholder="Employer Questions" required />' +
                                     '<button id="remove-employer_questions" type="button" class="btn btn-danger ml-2">Remove</button>' ;
         container.appendChild(newEmployerQuestions);
     });

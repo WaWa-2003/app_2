@@ -25,10 +25,6 @@ class JobController extends Controller
 
     public function store(Request $request)
     {
-
-        // dd($request->all());
-
-
         $validated = $request->validate([
             'user_id.*' => 'required|exists:users,id',
             'start_date.*' => 'required|date',
@@ -57,7 +53,7 @@ class JobController extends Controller
             ]);
         }
 
-        return redirect()->route('applicant.index')->with('success', 'Job record(s) created successfully.');
+        return redirect()->route('applicant.index')->with('successJob', 'Job record(s) created successfully.');
     }
 
     public function show($id)
@@ -81,10 +77,6 @@ class JobController extends Controller
 
     public function update(Request $request, Job $job)
     {
-        // dd($request->user_id);
-
-        return redirect()->route('applicant.index')->with('success', 'Job record(s) updated successfully.');
-
         $validated = $request->validate([
             'user_id.*' => 'required|exists:users,id',
             'start_date.*' => 'required|date',
@@ -123,7 +115,7 @@ class JobController extends Controller
             }
         }
 
-        return redirect()->route('applicant.index')->with('success', 'Job record(s) updated successfully.');
+        return redirect()->route('applicant.index')->with('successJob', 'Job record(s) updated successfully.');
     }
 
 }

@@ -5,11 +5,12 @@
                 <li>{{ $error }}</li>
             @endforeach
         </ul>
-    @endif
+    </div>
+@endif
 
-@if (session('success'))
-    <div>
-        {{ session('success') }}
+@if (session('successEducation'))
+    <div id="success-message-education">
+        {{ session('successEducation') }}
     </div>
 @endif
 
@@ -22,8 +23,42 @@
     <div>
         <label for="educations">
             {{ $educations->isEmpty() ? 'Add' : 'Update' }} Education History
+            <x-secondary-button id="toggle-edit-education" class="ml-2 mb-1">Edit</x-secondary-button>
         </label>
-        <div id="educations-container" class="space-y-2">
+
+        <div id="educations-view" class="space-y-2">
+            <div class="header-row flex bg-gray-200 py-2 px-4">
+                <div class="w-full mt-1 flex justify-center">Start Date</div>
+                <div class="w-full mt-1 flex justify-center">End Date</div>
+                <div class="w-full mt-1 flex justify-center">Subject</div>
+                <div class="w-full mt-1 flex justify-center">Institution</div>
+                <div class="w-full mt-1 flex justify-center">Country</div>
+                <div class="w-full mt-1 flex justify-center">Type</div>
+                <div class="w-full mt-1 flex justify-center">Actions</div>
+            </div>
+            @forelse ($educations as $education)
+            <div class="header-row flex bg-white px-4" data-id="{{ $education->id }}">
+                <div class="w-full flex justify-center">{{ $education->start_date }}</div>
+                <div class="w-full flex justify-center">{{ $education->end_date }}</div>
+                <div class="w-full flex justify-center">{{ $education->subject }}</div>
+                <div class="w-full flex justify-center">{{ $education->institution }}</div>
+                <div class="w-full flex justify-center">{{ $education->country }}</div>
+                <div class="w-full flex justify-center">{{ $education->type }}</div>
+                <div class="w-full flex justify-center">Remove</div></div>
+            </div>
+            @empty
+            @endforelse
+        </div>
+        <div id="educations-container" class="space-y-2" style="display: none;">
+            <div class="header-row flex bg-gray-200 py-2 px-4">
+                <div class="w-full mt-1 flex justify-center">Start Date</div>
+                <div class="w-full mt-1 flex justify-center">End Date</div>
+                <div class="w-full mt-1 flex justify-center">Subject</div>
+                <div class="w-full mt-1 flex justify-center">Institution</div>
+                <div class="w-full mt-1 flex justify-center">Country</div>
+                <div class="w-full mt-1 flex justify-center">Type</div>
+                <div class="w-full mt-1 flex justify-center">Actions</div>
+            </div>
             @forelse ($educations as $education)
                 <div class="input-group flex items-center" data-id="{{ $education->id }}">
                     <input type="hidden" name="id[]" value="{{ $education->id }}">
@@ -34,17 +69,19 @@
                     <input type="text" name="institution[]" class="form-control w-full mt-1" placeholder="Institution" value="{{ $education->institution }}" required>
                     <input type="text" name="country[]" class="form-control w-full mt-1" placeholder="Country" value="{{ $education->country }}" required>
                     <input type="text" name="type[]" class="form-control w-full mt-1" placeholder="Type" value="{{ $education->type }}" required>
-                    <button type="button" class="btn btn-danger ml-2 remove-education">Remove</button>
+                    <x-danger-button type="button" class="remove-education form-control w-full mt-1 justify-center">Remove</x-danger-button>
                 </div>
             @empty
             @endforelse
         </div>
-        <button type="button" id="add-education" class="btn btn-success mt-2">Add Educations</button>
+        <x-secondary-button type="button" id="add-education" class="mt-2" style="display: none;">
+            Add Educations
+        </x-secondary-button>
+        <x-primary-button type="submit" id="submit-button" class="btn btn-primary mt-2" style="display: none;">
+            {{ $educations->isEmpty() ? 'Create' : 'Update' }}
+        </x-primary-button>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-2">
-        {{ $educations->isEmpty() ? 'Create' : 'Update' }}
-    </button>
 
 </form>
 
@@ -55,6 +92,23 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const toggleEditButtonEducation = document.getElementById('toggle-edit-education');
+        const educationsView = document.getElementById('educations-view');
+        const educationsContainer = document.getElementById('educations-container');
+        const addEducationButton = document.getElementById('add-education');
+        const submitButton = document.getElementById('submit-button');
+
+        let isEditable = false;
+
+        toggleEditButtonEducation.addEventListener('click', function () {
+            isEditable = !isEditable;
+            educationsView.style.display = isEditable ? 'none' : 'block';
+            educationsContainer.style.display = isEditable ? 'block' : 'none';
+            addEducationButton.style.display = isEditable ? 'inline-block' : 'none';
+            submitButton.style.display = isEditable ? 'inline-block' : 'none';
+            toggleEditButtonEducation.textContent = isEditable ? 'Cancel Edit' : 'Edit';
+        });
+
         document.getElementById('add-education').addEventListener('click', function () {
             var container = document.getElementById('educations-container');
             var newGroup = document.createElement('div');
@@ -68,7 +122,7 @@
                 <input type="text" name="institution[]" class="form-control w-full mt-1" placeholder="Institution" required>
                 <input type="text" name="country[]" class="form-control w-full mt-1" placeholder="Country" required>
                 <input type="text" name="type[]" class="form-control w-full mt-1" placeholder="Type" required>
-                <button type="button" class="btn btn-danger ml-2 remove-education">Remove</button>
+                <x-danger-button type="button" class="remove-education form-control w-full mt-1 justify-center">Remove</x-danger-button>
             `;
             container.appendChild(newGroup);
         });
@@ -76,17 +130,16 @@
         document.getElementById('educations-container').addEventListener('click', function (e) {
             if (e.target && e.target.classList.contains('remove-education')) {
                 var educationId = e.target.closest('.input-group').getAttribute('data-id');
-                // if (educationId) {
-                //     if (confirm('Are you sure you want to delete this record?')) {
-                //         var deleteForm = document.getElementById('delete-education-form');
-                //         deleteForm.setAttribute('action', '/educations/' + educationId);
-                //         deleteForm.submit();
-                //     }
-                // } else {
-                //     e.target.closest('.input-group').remove();
-                // }
                 e.target.closest('.input-group').remove();
             }
         });
     });
+
+    // Hide success message after 5 seconds
+    setTimeout(function () {
+        var successMessageEducation = document.getElementById('success-message-education');
+        if (successMessageEducation) {
+            successMessageEducation.style.display = 'none';
+        }
+    }, 5000);
 </script>

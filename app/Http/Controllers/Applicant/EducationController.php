@@ -47,7 +47,7 @@ class EducationController extends Controller
             ]);
         }
 
-        return redirect()->route('applicant.index')->with('success', 'Education record(s) created successfully.');
+        return redirect()->route('applicant.index')->with('successEducation', 'Education record(s) created successfully.');
     }
 
     public function show($id)
@@ -97,6 +97,6 @@ class EducationController extends Controller
                 ]);
             }
         }
-        return redirect()->route('applicant.index')->with('success', 'Education record(s) updated successfully.');
+        return redirect()->route('applicant.index')->with('successEducation', 'Education record(s) updated successfully.');
     }
 }
