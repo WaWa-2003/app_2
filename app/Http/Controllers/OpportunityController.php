@@ -6,6 +6,7 @@ use App\Models\Opportunity\Opportunity;
 use App\Models\Opportunity\Requirement;
 use App\Models\Opportunity\Qualification;
 use App\Models\Opportunity\EmployerQuestion;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 
 class OpportunityController extends Controller
@@ -88,11 +89,18 @@ class OpportunityController extends Controller
 
     public function show(Opportunity $opportunity)
     {
+        $user_id = auth()->user()->id;
+        $opportunity_id = $opportunity->id;
+        $wishlist = Wishlist::where([
+            ['user_id', $user_id],
+            ['opportunity_id', $opportunity_id]
+        ])->get();
+
         $opportunities = Opportunity::all();
 
-        $requirements = Requirement::where('opportunity_id', $opportunity->id)->get();
-        $qualifications = Qualification::where('opportunity_id', $opportunity->id)->get();
-        $employer_questions = EmployerQuestion::where('opportunity_id', $opportunity->id)->get();
+        $requirements = Requirement::where('opportunity_id', $opportunity_id)->get();
+        $qualifications = Qualification::where('opportunity_id', $opportunity_id)->get();
+        $employer_questions = EmployerQuestion::where('opportunity_id', $opportunity_id)->get();
 
         return view('opportunity.show', [
             'opportunity' => $opportunity,
@@ -100,6 +108,7 @@ class OpportunityController extends Controller
             'requirements' => $requirements,
             'qualifications' => $qualifications,
             'employer_questions' => $employer_questions,
+            'wishlist' => $wishlist
         ]);
     }
 

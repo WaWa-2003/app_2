@@ -24,11 +24,12 @@ return new class extends Migration
             $table->string('job_type');
             $table->string('location');
             $table->text('description');
-            $table->date('jobClosingDate')->nullable();
-            $table->boolean('availableStatus');
-            $table->string('createdByWho');
-            $table->string('hashtagKeyWords')->nullable();
-            $table->string('openToGender')->nullable();
+            $table->date('job_closing_date')->nullable();
+            $table->boolean('available_status');
+            $table->string('created_by_who');
+            $table->string('hashtag_keywords')->nullable();
+            $table->string('open_to_gender')->nullable();
+            $table->string('reporting_to')->nullable();
             $table->timestamps();
         });
     }

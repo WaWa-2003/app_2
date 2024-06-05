@@ -20,5 +20,19 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        $this->call([
+            // UserSeeder::class, //done
+
+            OpportunitySeeder::class, // Opportunity
+            RequirementSeeder::class, // Opportunity
+            QualificationSeeder::class, // Opportunity
+            EmployerQuestionSeeder::class, // Opportunity
+            EducationSeeder::class, // Applicant
+            JobSeeder::class, // Applicant
+            OtherSeeder::class, // Applicant
+            ApplicationSeeder::class, // "App\Models\Opportunity" not found
+            WishlistSeeder::class, // "App\Models\Opportunity" not found
+        ]);
     }
 }
