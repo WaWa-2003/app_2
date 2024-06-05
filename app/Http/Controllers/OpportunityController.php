@@ -91,12 +91,15 @@ class OpportunityController extends Controller
         $opportunities = Opportunity::all();
 
         $requirements = Requirement::where('opportunity_id', $opportunity->id)->get();
-
+        $qualifications = Qualification::where('opportunity_id', $opportunity->id)->get();
+        $employer_questions = EmployerQuestion::where('opportunity_id', $opportunity->id)->get();
 
         return view('opportunity.show', [
             'opportunity' => $opportunity,
             'opportunities' => $opportunities,
-            'requirements' => $requirements
+            'requirements' => $requirements,
+            'qualifications' => $qualifications,
+            'employer_questions' => $employer_questions,
         ]);
     }
 
@@ -105,9 +108,7 @@ class OpportunityController extends Controller
         $opportunities = Opportunity::all();
 
         $requirements = Requirement::where('opportunity_id', $opportunity->id)->get();
-
         $qualifications = Qualification::where('opportunity_id', $opportunity->id)->get();
-
         $employer_questions = EmployerQuestion::where('opportunity_id', $opportunity->id)->get();
 
         return view('opportunity.edit', [

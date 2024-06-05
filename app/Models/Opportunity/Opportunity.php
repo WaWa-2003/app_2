@@ -41,4 +41,12 @@ class Opportunity extends Model
         return $this->hasMany(EmployerQuestion::class);
     }
 
+    public function applications(){
+        return $this->hasMany(Appication::class);
+    }
+
+    public function wishlists(){
+        return $this->hasMany(Wishlist::class);
+    }
+
 }

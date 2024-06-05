@@ -50,7 +50,6 @@
 
             @endif
 
-
             <span class="text-sm font-italic text-gray-400"> 3 days ago</span>
         </div>
     </div>
