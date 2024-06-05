@@ -5,13 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Model\User;
+
 class Wishlist extends Model
 {
     use HasFactory;
 
-    protected $fillables =[
+    protected $fillable =[
         'user_id',
-        'opportunity_id'
+        'opportunity_id',
+        'status'
     ];
 
     public function user(){

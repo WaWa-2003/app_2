@@ -204,4 +204,42 @@ class OpportunityController extends Controller
         return redirect()->route('opportunity.index')
                          ->with('success', 'Opportunity deleted successfully.');
     }
+
+    public function wishlist_add(Request $request, Opportunity $opportunity)
+    {
+        $user_id = auth()->user()->id;
+        $opportunity_id = $opportunity->id;
+
+        Wishlist::updateOrCreate(
+            [
+                'user_id' => $user_id,
+                'opportunity_id' => $opportunity_id,
+            ],
+            [
+                'status' => true,
+            ]
+        );
+
+        return redirect()->route('opportunity.show',$opportunity_id)
+                         ->with('messageWishlist', 'Added to Wishlist');
+    }
+
+    public function wishlist_remove(Request $request, Opportunity $opportunity)
+    {
+        $user_id = auth()->user()->id;
+        $opportunity_id = $opportunity->id;
+
+        $wishlist = Wishlist::where([
+            ['user_id', $user_id],
+            ['opportunity_id', $opportunity_id],
+        ])->first();
+
+        if ($wishlist) {
+            $wishlist->status = false;
+            $wishlist->save();
+        }
+
+        return redirect()->route('opportunity.show',$opportunity_id)
+                         ->with('messageWishlist', 'Removed from Wishlist');
+    }
 }

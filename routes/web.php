@@ -49,9 +49,12 @@ Route::prefix('/opportunities')->group(function () {
     Route::put('/{opportunity}', [OpportunityController::class, 'update'])->name('opportunity.update');
     Route::patch('/{opportunity}', [OpportunityController::class, 'update']);
     Route::delete('/{opportunity}', [OpportunityController::class, 'destroy'])->name('opportunity.destroy');
+
 }); // Route::resource('opportunities', OpportunityController::class);
 
 
+Route::post('/wishlist/add/{opportunity}', [OpportunityController::class, 'wishlist_add'])->name('wishlist.add');
+Route::put('/wishlist/remove/{opportunity}', [OpportunityController::class, 'wishlist_remove'])->name('wishlist.remove');
 
 
 Route::resource('jobs', JobController::class);
