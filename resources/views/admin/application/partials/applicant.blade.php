@@ -1,0 +1,5 @@
+<section>
+    {{
+        $user
+    }}
+</section>

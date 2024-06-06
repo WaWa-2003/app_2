@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->integer('salary_expectation')->nullable();
             $table->date('earliest_possible_start_date')->nullable();
-            $table->string('application_status')->nullable();
+            $table->string('application_status')->default('New');
             $table->boolean('next_step_status')->nullable();
             $table->string('notes')->nullable();
             $table->date('prescreen_date')->nullable();
@@ -39,7 +39,8 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
-/**
+
+    /**
      * Reverse the migrations.
      *
      * @return void

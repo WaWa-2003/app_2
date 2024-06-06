@@ -1,14 +1,19 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AdminController;
+
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ApplicationController;
+
 use App\Http\Controllers\OpportunityController;
+
 use App\Http\Controllers\Applicant\JobController;
 use App\Http\Controllers\Applicant\EducationController;
 use App\Http\Controllers\Applicant\OtherController;
 use App\Http\Controllers\Applicant\ProfessionalInformationController;
 use App\Http\Controllers\Applicant\WishlistController;
 use App\Http\Controllers\Applicant\ApplyController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,18 +45,39 @@ require __DIR__.'/auth.php';
 
 Route::middleware(['auth','admin'])->prefix('/admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-}); // Route::get('/admin/dashboard',[AdminController::class, 'index'])->middleware(['auth','admin'])->name('admin.dashboard') ;
+});
+
+
+Route::prefix('/admin/applications')->middleware(['auth','admin'])->group(function () {
+    Route::get('/', [ApplicationController::class, 'index'])->name('application.index');
+    Route::get('opportunity/{opportunity}', [ApplicationController::class, 'show'])->name('application.opportunity.show');
+    Route::get('opportunity/{opportunity}/all', [ApplicationController::class, 'showAll'])->name('application.opportunity.show.all');
+    Route::get('opportunity/{opportunity}/new', [ApplicationController::class, 'showNew'])->name('application.opportunity.show.new');
+    Route::get('opportunity/{opportunity}/prescreen', [ApplicationController::class, 'showPrescreen'])->name('application.opportunity.show.prescreen');
+    Route::get('opportunity/{opportunity}/first-interview', [ApplicationController::class, 'showFirstInterview'])->name('application.opportunity.show.firstInterview');
+    Route::get('opportunity/{opportunity}/second-interview', [ApplicationController::class, 'showSecondInterview'])->name('application.opportunity.show.secondInterview');
+    Route::get('opportunity/{opportunity}/third-interview', [ApplicationController::class, 'showThirdInterview'])->name('application.opportunity.show.thirdInterview');
+    Route::get('opportunity/{opportunity}/offer', [ApplicationController::class, 'showOffer'])->name('application.opportunity.show.offer');
+    Route::get('opportunity/{opportunity}/accept', [ApplicationController::class, 'showAccept'])->name('application.opportunity.show.accept');
+    Route::get('opportunity/{opportunity}/reject', [ApplicationController::class, 'showReject'])->name('application.opportunity.show.reject');
+    Route::get('opportunity/{opportunity}/not-suitable', [ApplicationController::class, 'showNotSuitable'])->name('application.opportunity.show.notSuitable');
+
+    Route::get('/{application}/opportunity/{opportunity}/applicant/{applicant}', [ApplicationController::class, 'applicantDetail'])->name('application.opportunity.applicant');
+});
+
 
 Route::prefix('/opportunities')->group(function () {
+    Route::middleware(['auth','admin'])->group(function () {
+        Route::get('/{opportunity}/edit', [OpportunityController::class, 'edit'])->name('opportunity.edit');
+        Route::put('/{opportunity}', [OpportunityController::class, 'update'])->name('opportunity.update');
+        Route::patch('/{opportunity}', [OpportunityController::class, 'update']);
+        Route::delete('/{opportunity}', [OpportunityController::class, 'destroy'])->name('opportunity.destroy');
+        Route::get('/', [OpportunityController::class, 'index'])->name('opportunity.index');
+        Route::get('/create', [OpportunityController::class, 'create'])->name('opportunity.create');
+        Route::post('/', [OpportunityController::class, 'store'])->name('opportunity.store');
+    });
     Route::get('/', [OpportunityController::class, 'index'])->name('opportunity.index');
-    Route::get('/create', [OpportunityController::class, 'create'])->name('opportunity.create');
-    Route::post('/', [OpportunityController::class, 'store'])->name('opportunity.store');
     Route::get('/{opportunity}', [OpportunityController::class, 'show'])->name('opportunity.show');
-    Route::get('/{opportunity}/edit', [OpportunityController::class, 'edit'])->name('opportunity.edit');
-    Route::put('/{opportunity}', [OpportunityController::class, 'update'])->name('opportunity.update');
-    Route::patch('/{opportunity}', [OpportunityController::class, 'update']);
-    Route::delete('/{opportunity}', [OpportunityController::class, 'destroy'])->name('opportunity.destroy');
-
 }); // Route::resource('opportunities', OpportunityController::class);
 
 

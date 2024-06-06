@@ -35,6 +35,9 @@
                     <x-nav-link :href="route('opportunity.index')" :active="request()->routeIs('dashboard')">
                         {{ __('Opportunities') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('application.index')" :active="request()->routeIs('dashboard')">
+                        {{ __('Applications') }}
+                    </x-nav-link>
                 </div>
 
                 @endif
