@@ -6,7 +6,8 @@ use App\Models\Opportunity\Opportunity;
 use App\Models\Opportunity\Requirement;
 use App\Models\Opportunity\Qualification;
 use App\Models\Opportunity\EmployerQuestion;
-use App\Models\Wishlist;
+use App\Models\Applicant\Wishlist;
+use App\Models\Applicant\Application;
 use Illuminate\Http\Request;
 
 class OpportunityController extends Controller
@@ -95,6 +96,10 @@ class OpportunityController extends Controller
             ['user_id', $user_id],
             ['opportunity_id', $opportunity_id]
         ])->get();
+        $application = Application::where([
+            ['user_id', $user_id],
+            ['opportunity_id', $opportunity_id]
+        ])->get();
 
         $opportunities = Opportunity::all();
 
@@ -108,7 +113,8 @@ class OpportunityController extends Controller
             'requirements' => $requirements,
             'qualifications' => $qualifications,
             'employer_questions' => $employer_questions,
-            'wishlist' => $wishlist
+            'wishlist' => $wishlist,
+            'application' => $application
         ]);
     }
 
@@ -205,41 +211,5 @@ class OpportunityController extends Controller
                          ->with('success', 'Opportunity deleted successfully.');
     }
 
-    public function wishlist_add(Request $request, Opportunity $opportunity)
-    {
-        $user_id = auth()->user()->id;
-        $opportunity_id = $opportunity->id;
 
-        Wishlist::updateOrCreate(
-            [
-                'user_id' => $user_id,
-                'opportunity_id' => $opportunity_id,
-            ],
-            [
-                'status' => true,
-            ]
-        );
-
-        return redirect()->route('opportunity.show',$opportunity_id)
-                         ->with('messageWishlist', 'Added to Wishlist');
-    }
-
-    public function wishlist_remove(Request $request, Opportunity $opportunity)
-    {
-        $user_id = auth()->user()->id;
-        $opportunity_id = $opportunity->id;
-
-        $wishlist = Wishlist::where([
-            ['user_id', $user_id],
-            ['opportunity_id', $opportunity_id],
-        ])->first();
-
-        if ($wishlist) {
-            $wishlist->status = false;
-            $wishlist->save();
-        }
-
-        return redirect()->route('opportunity.show',$opportunity_id)
-                         ->with('messageWishlist', 'Removed from Wishlist');
-    }
 }

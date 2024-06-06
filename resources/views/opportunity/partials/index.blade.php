@@ -1,8 +1,10 @@
+@if(auth()->user()->type === 'admin')
 <div class="flex justify-end">
     <a href="{{ route('opportunity.create') }}" class="inline-flex items-center p-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         New
     </a>
 </div>
+@endif
 
 @foreach ($opportunities->chunk(3) as $chunk)
 <div class="flex gap-4 p-3">
@@ -33,14 +35,6 @@
 
             @else
 
-            <form action="{{ route('opportunity.destroy',$opportunity->id) }}" method="POST">
-                <a class="btn btn-info" href="{{ route('opportunity.show',$opportunity->id) }}">Show</a>
-                <a class="btn btn-primary" href="{{ route('opportunity.edit',$opportunity->id) }}">Edit</a>
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
-
             <a href="{{ route('opportunity.show',$opportunity) }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 Apply
                 <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
@@ -50,7 +44,7 @@
 
             @endif
 
-            <span class="text-sm font-italic text-gray-400"> 3 days ago</span>
+            <span class="text-sm font-italic text-gray-400"> Posted on {{ $opportunity->created_at }}</span>
         </div>
     </div>
     @endforeach

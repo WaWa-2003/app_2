@@ -16,6 +16,9 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('opportunity.index')" :active="request()->routeIs('dashboard')">
+                        {{ __('Opportunities') }}
+                    </x-nav-link>
                 </div>
                 @else
                 <!-- Logo -->
@@ -28,6 +31,9 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Admin Dashboard') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('opportunity.index')" :active="request()->routeIs('dashboard')">
+                        {{ __('Opportunities') }}
                     </x-nav-link>
                 </div>
 

@@ -6,8 +6,10 @@ use App\Http\Controllers\OpportunityController;
 use App\Http\Controllers\Applicant\JobController;
 use App\Http\Controllers\Applicant\EducationController;
 use App\Http\Controllers\Applicant\OtherController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Applicant\ProfessionalInformationController;
+use App\Http\Controllers\Applicant\WishlistController;
+use App\Http\Controllers\Applicant\ApplyController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,8 +55,10 @@ Route::prefix('/opportunities')->group(function () {
 }); // Route::resource('opportunities', OpportunityController::class);
 
 
-Route::post('/wishlist/add/{opportunity}', [OpportunityController::class, 'wishlist_add'])->name('wishlist.add');
-Route::put('/wishlist/remove/{opportunity}', [OpportunityController::class, 'wishlist_remove'])->name('wishlist.remove');
+Route::post('/wishlist/add/{opportunity}', [WishlistController::class, 'wishlist_add'])->name('wishlist.add');
+Route::put('/wishlist/remove/{opportunity}', [WishlistController::class, 'wishlist_remove'])->name('wishlist.remove');
+
+Route::post('/apply/{opportunity}', [ApplyController::class, 'apply'])->name('apply');
 
 
 Route::resource('jobs', JobController::class);

@@ -1,7 +1,20 @@
 <section>
-    <a href="{{ route('opportunity.index') }}">
-        <x-secondary-button>Back</x-secondary-button>
-    </a>
+    <div class="flex ">
+
+        <a href="{{ route('opportunity.index') }}">
+            <x-secondary-button>Back</x-secondary-button>
+        </a>
+
+        @if(auth()->user()->type === 'admin')
+        <a href="{{ route('opportunity.edit',$opportunity->id) }}" >
+            <x-secondary-button class="ms-2 inline-flex items-center p-2 text-sm font-medium text-center text-white bg-yellow-500 rounded-lg hover:bg-yellow-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Edit</x-secondary-button>
+        </a>
+        @endif
+
+    </div>
+
+
+
     <header>
         <h2 class="text-xl font-medium text-gray-900 dark:text-gray-100">
             {{ $opportunity->name }}
@@ -36,9 +49,28 @@
     </p>
 
     <div class="inline-flex">
-        <a href="{{ route('opportunity.show', $opportunity->id) }}" class="inline-flex items-center p-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-            Apply Now
-        </a>
+
+        @if ($application->isEmpty())
+
+        <form id="wishlist-form-add" action="{{ route('apply', $opportunity->id) }}" method="POST">
+            @csrf
+            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+            <input type="hidden" name="opportunity_id" value="{{ $opportunity->id }}">
+            <button type="submit" class="bg-blue-700 hover:bg-blue-800 text-white p-2 inline-flex rounded-lg items-center">
+                Apply
+            </button>
+        </form>
+
+        @else
+
+        <button type="disable" class="bg-blue-700 hover:bg-blue-800 text-white p-2 inline-flex rounded-lg items-center">
+            Applied
+        </button>
+
+        @endif
+
+
+
 
         @if ($wishlist->isEmpty() || ($wishlist->isNotEmpty() && !$wishlist->first()->status))
             <form id="wishlist-form-add" action="{{ route('wishlist.add', $opportunity->id) }}" method="POST">

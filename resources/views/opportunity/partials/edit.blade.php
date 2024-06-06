@@ -1,7 +1,14 @@
 <section>
+
+    <a href="{{ route('opportunity.index') }}">
+        <x-secondary-button>Back</x-secondary-button>
+    </a>
+
     <header>
-        <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            Edit Opportunity
+        <h2 class="text-xl font-medium text-gray-900 dark:text-gray-100">
+            <strong>
+                Edit Opportunity
+            </strong>
         </h2>
     </header>
 

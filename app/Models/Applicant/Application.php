@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Applicant;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +11,7 @@ class Application extends Model
 
     protected $fillable = [
         'opportunity_id',
-        'applicant_id',
+        'user_id',
         'salary_expectation',
         'earliest_possible_start_date',
         'application_status',
