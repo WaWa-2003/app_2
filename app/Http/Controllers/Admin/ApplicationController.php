@@ -20,17 +20,40 @@ class ApplicationController extends Controller
      */
     public function index()
     {
-        $applications = Application::with(['opportunity', 'user'])->get();
+        return $this->getApplicationsByStatus();
+    }
+
+    public function getApplicationsByStatus($status = null){
+
+        if ($status == "All"){
+            $status = null;
+        }
+
+        if ($status) {
+            $applications = Application::with(['opportunity', 'user'])->where('application_status', $status)->get();
+        } else {
+            $applications = Application::with(['opportunity', 'user'])->get();
+        }
         $groupedApplications = $applications->groupBy('opportunity_id');
+
+        $StatusBar = ['New', 'Prescreen', 'First Interview', 'Second Interview', 'Third Interview', 'Offer', 'Accept', 'Reject', 'Not Suitable'];
+        $countsStatusBarArray = [];
+        foreach ($StatusBar as $oneStatus) {
+            $countsStatusBarArray[$oneStatus] = Application::where('application_status', $oneStatus)->count();
+        }
+
+        $countsStatusBarArray['All'] = Application::count();
 
         return view('admin.application.index', [
             'groupedApplications' => $groupedApplications,
-            'applications' => $applications
+            'applications' => $applications,
+            'countsStatusBarArray' => $countsStatusBarArray,
+            'opportunity_id' => NULL,
+            'status' => $status,
         ]);
     }
 
-
-    private function getApplicationsByStatus($opportunity_id, $status = null, $applicant_id = null)
+    private function getApplicationsByOpportunityByStatus($opportunity_id, $status = null, $applicant_id = null)
     {
         $user = User::Find($applicant_id);
 
@@ -61,63 +84,63 @@ class ApplicationController extends Controller
 
     public function show($opportunity_id)
     {
-        return $this->getApplicationsByStatus($opportunity_id);
+        return $this->getApplicationsByOpportunityByStatus($opportunity_id);
     }
 
     public function showAll($opportunity_id)
     {
-        return $this->getApplicationsByStatus($opportunity_id);
+        return $this->getApplicationsByOpportunityByStatus($opportunity_id);
     }
 
     public function showNew($opportunity_id)
     {
-        return $this->getApplicationsByStatus($opportunity_id, 'New');
+        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'New');
     }
 
     public function showPrescreen($opportunity_id)
     {
-        return $this->getApplicationsByStatus($opportunity_id, 'Prescreen');
+        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Prescreen');
     }
 
     public function showFirstInterview($opportunity_id)
     {
-        return $this->getApplicationsByStatus($opportunity_id, 'First Interview');
+        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'First Interview');
     }
 
     public function showSecondInterview($opportunity_id)
     {
-        return $this->getApplicationsByStatus($opportunity_id, 'Second Interview');
+        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Second Interview');
     }
 
     public function showThirdInterview($opportunity_id)
     {
-        return $this->getApplicationsByStatus($opportunity_id, 'Third Interview');
+        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Third Interview');
     }
 
     public function showOffer($opportunity_id)
     {
-        return $this->getApplicationsByStatus($opportunity_id, 'Offer');
+        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Offer');
     }
 
     public function showAccept($opportunity_id)
     {
-        return $this->getApplicationsByStatus($opportunity_id, 'Accept');
+        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Accept');
     }
 
     public function showReject($opportunity_id)
     {
-        return $this->getApplicationsByStatus($opportunity_id, 'Reject');
+        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Reject');
     }
 
     public function showNotSuitable($opportunity_id)
     {
-        return $this->getApplicationsByStatus($opportunity_id, 'Not Suitable');
+        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Not Suitable');
     }
 
 
     public function applicantDetail($opportunity_id, $status, $applicant_id)
     {
-        return $this->getApplicationsByStatus($opportunity_id, $status, $applicant_id);
+        return $this->getApplicationsByOpportunityByStatus($opportunity_id, $status, $applicant_id);
     }
 
     /**

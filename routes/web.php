@@ -51,7 +51,10 @@ Route::middleware(['auth','admin'])->prefix('/admin')->group(function () {
 Route::prefix('/admin/applications')->middleware(['auth','admin'])->group(function () {
     Route::get('/', [ApplicationController::class, 'index'])->name('application.index');
 
+    Route::get('/{status}', [ApplicationController::class, 'getApplicationsByStatus'])->name('application.status');
+
     Route::get('opportunity/{opportunity}', [ApplicationController::class, 'show'])->name('application.opportunity.show');
+
     Route::get('opportunity/{opportunity}/all', [ApplicationController::class, 'showAll'])->name('application.opportunity.show.all');
     Route::get('opportunity/{opportunity}/new', [ApplicationController::class, 'showNew'])->name('application.opportunity.show.new');
     Route::get('opportunity/{opportunity}/prescreen', [ApplicationController::class, 'showPrescreen'])->name('application.opportunity.show.prescreen');

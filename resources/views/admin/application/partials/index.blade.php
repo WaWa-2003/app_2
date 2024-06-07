@@ -4,10 +4,10 @@
         <div class="w-full mt-1 flex justify-center text-2xl font-bold">Number of Applications</div>
         <div class="w-full mt-1 flex justify-center text-2xl font-bold">Actions</div>
     </div>
-    @forelse ($groupedApplications as $opportunityId => $applications)
+    @forelse ($groupedApplications as $opportunityId => $applicationsAll)
     <div class="header-row flex bg-white px-4 py-1 border-b border-gray-300 justify-center align-center" data-id="{{ $opportunityId }}">
-        <div class="w-full flex justify-center">{{ $applications->first()->opportunity->name }}</div>
-        <div class="w-full flex justify-center">{{ $applications->count() }}</div>
+        <div class="w-full flex justify-center">{{ $applicationsAll->first()->opportunity->name }}</div>
+        <div class="w-full flex justify-center">{{ $applicationsAll->count() }}</div>
         <div class="w-full flex justify-center">
             <x-secondary-button>
                 <a href="{{ route('application.opportunity.show', $opportunityId) }}">Show</a>
@@ -16,7 +16,7 @@
     </div>
     @empty
         <div class="header-row flex bg-white px-4">
-            <div class="w-full flex justify-center" colspan="3">No applications found.</div>
+            <div class="w-full flex justify-center p-4" colspan="3">No applications found.</div>
         </div>
     @endforelse
 </div>

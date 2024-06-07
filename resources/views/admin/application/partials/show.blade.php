@@ -1,9 +1,21 @@
 <section>
-    <div class="flex ">
-        <a href="{{ route('application.index') }}">
-            <x-secondary-button>Back</x-secondary-button>
-        </a>
+    <div class="flex align-center">
+        <div>
+            <a href="{{ route('application.index') }}">
+                <x-secondary-button>Back</x-secondary-button>
+            </a>
+        </div>
+        @if (!$applications->isEmpty())
+            <div class="ms-3">
+                <h2 class="text-2xl font-medium text-gray-900 dark:text-gray-100">
+                    <strong>
+                        {{ $applications->first()->opportunity->name }}
+                    </strong>
+                </h2>
+            </div>
+        @endif
     </div>
+
     @if ($applications->isEmpty())
         <div class="text-center text-gray-600 dark:text-gray-300">
             There is no data for this status.
@@ -41,8 +53,7 @@
                         <div class="flex flex-col gap-4 p-3">
                             @foreach ($chunk as $application)
                                 <div id="this-div">
-                                    <div
-                                        class="p-3 mb-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                                    <div class="p-3 mb-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
                                         <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
                                             Applicant Name - {{ $application->user->name }}
                                         </p>
