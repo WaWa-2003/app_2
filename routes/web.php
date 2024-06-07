@@ -50,6 +50,7 @@ Route::middleware(['auth','admin'])->prefix('/admin')->group(function () {
 
 Route::prefix('/admin/applications')->middleware(['auth','admin'])->group(function () {
     Route::get('/', [ApplicationController::class, 'index'])->name('application.index');
+
     Route::get('opportunity/{opportunity}', [ApplicationController::class, 'show'])->name('application.opportunity.show');
     Route::get('opportunity/{opportunity}/all', [ApplicationController::class, 'showAll'])->name('application.opportunity.show.all');
     Route::get('opportunity/{opportunity}/new', [ApplicationController::class, 'showNew'])->name('application.opportunity.show.new');
@@ -62,7 +63,7 @@ Route::prefix('/admin/applications')->middleware(['auth','admin'])->group(functi
     Route::get('opportunity/{opportunity}/reject', [ApplicationController::class, 'showReject'])->name('application.opportunity.show.reject');
     Route::get('opportunity/{opportunity}/not-suitable', [ApplicationController::class, 'showNotSuitable'])->name('application.opportunity.show.notSuitable');
 
-    Route::get('/{application}/opportunity/{opportunity}/applicant/{applicant}', [ApplicationController::class, 'applicantDetail'])->name('application.opportunity.applicant');
+    Route::get('/opportunity/{opportunity_id}/{status}/applicant/{applicant_id}', [ApplicationController::class, 'applicantDetail'])->name('application.opportunity.applicant');
 });
 
 

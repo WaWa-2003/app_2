@@ -20,8 +20,13 @@ class OpportunityController extends Controller
 
     public function index()
     {
+        $user_id = auth()->user()->id;
         $opportunities = Opportunity::all();
-        return view('opportunity.index', compact('opportunities'));
+        $applications = Application::where('user_id', $user_id)->get();
+
+        $applicationsByOpportunity = $applications->keyBy('opportunity_id');
+
+        return view('opportunity.index', compact('opportunities', 'applicationsByOpportunity'));
     }
 
     public function create()

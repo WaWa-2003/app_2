@@ -30,8 +30,10 @@ class ApplicationController extends Controller
     }
 
 
-    private function getApplicationsByStatus($opportunity_id, $status = null, $user = null)
+    private function getApplicationsByStatus($opportunity_id, $status = null, $applicant_id = null)
     {
+        $user = User::Find($applicant_id);
+
         $query = Application::with(['opportunity', 'user'])->where('opportunity_id', $opportunity_id);
 
         if ($status) {
@@ -40,10 +42,20 @@ class ApplicationController extends Controller
 
         $applications = $query->get();
 
+        $StatusBar = ['New', 'Prescreen', 'First Interview', 'Second Interview', 'Third Interview', 'Offer', 'Accept', 'Reject', 'Not Suitable'];
+        $countsStatusBarArray = [];
+        foreach ($StatusBar as $oneStatus) {
+            $countsStatusBarArray[$oneStatus] = Application::where('opportunity_id', $opportunity_id)
+                                          ->where('application_status', $oneStatus)
+                                          ->count();
+        }
+        $countsStatusBarArray['All'] = Application::where('opportunity_id', $opportunity_id)->count();
+
         return view('admin.application.show', [
             'applications' => $applications,
             'opportunity_id' => $opportunity_id,
             'user' => $user,
+            'countsStatusBarArray' => $countsStatusBarArray,
         ]);
     }
 
@@ -103,81 +115,9 @@ class ApplicationController extends Controller
     }
 
 
-    public function applicantDetail($application_id,$opportunity_id,$user_id)
+    public function applicantDetail($opportunity_id, $status, $applicant_id)
     {
-        $user = User::findOrFail($user_id);
-
-        $application = Application::findOrFail($application_id);
-
-        $application_status = $application->application_status;
-
-        switch ($application_status) {
-            case 'New':
-                $applications = Application::with(['opportunity', 'user'])
-                            ->where([
-                                ['opportunity_id', $opportunity_id],
-                                ['application_status', 'New']
-                            ])->get();
-            case 'Prescreen':
-                $applications = Application::with(['opportunity', 'user'])
-                            ->where([
-                                ['opportunity_id', $opportunity_id],
-                                ['application_status', 'Prescreen']
-                            ])->get();
-            case 'First Interview':
-                $applications = Application::with(['opportunity', 'user'])
-                            ->where([
-                                ['opportunity_id', $opportunity_id],
-                                ['application_status', 'First Interview']
-                            ])->get();
-            case 'Second Interview':
-                $applications = Application::with(['opportunity', 'user'])
-                            ->where([
-                                ['opportunity_id', $opportunity_id],
-                                ['application_status', 'Second Interview']
-                            ])->get();
-            case 'Third Interview':
-                $applications = Application::with(['opportunity', 'user'])
-                            ->where([
-                                ['opportunity_id', $opportunity_id],
-                                ['application_status', 'Third Interview']
-                            ])->get();
-            case 'Offer':
-                $applications = Application::with(['opportunity', 'user'])
-                            ->where([
-                                ['opportunity_id', $opportunity_id],
-                                ['application_status', 'Offer']
-                            ])->get();
-            case 'Accept':
-                $applications = Application::with(['opportunity', 'user'])
-                            ->where([
-                                ['opportunity_id', $opportunity_id],
-                                ['application_status', 'Accept']
-                            ])->get();
-            case 'Reject':
-                $applications = Application::with(['opportunity', 'user'])
-                            ->where([
-                                ['opportunity_id', $opportunity_id],
-                                ['application_status', 'Reject']
-                            ])->get();
-            case 'Not Suitable':
-                $applications = Application::with(['opportunity', 'user'])
-                            ->where([
-                                ['opportunity_id', $opportunity_id],
-                                ['application_status', 'Not Suitable']
-                            ])->get();
-            default:
-                $applications = Application::with(['opportunity', 'user'])
-                            ->where([
-                                ['opportunity_id', $opportunity_id],
-                            ])->get();
-        }
-
-        return view('admin.application.show', [
-            'applications' => $applications,
-            'opportunity_id' => $opportunity_id,
-            'user' => $user,
-        ]);
+        return $this->getApplicationsByStatus($opportunity_id, $status, $applicant_id);
     }
 
     /**
