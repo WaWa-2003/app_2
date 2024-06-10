@@ -7,7 +7,7 @@ use App\Models\Opportunity\Requirement;
 use App\Models\Opportunity\Qualification;
 use App\Models\Opportunity\EmployerQuestion;
 use App\Models\Applicant\Wishlist;
-use App\Models\Application;
+use App\Models\Application\Application;
 use Illuminate\Http\Request;
 
 class OpportunityController extends Controller

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Application;
 
 use App\Models\Opportunity\Opportunity;
 
@@ -42,5 +42,8 @@ class Application extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function notes(){
+        return $this->hasMany(Note::class);
+    }
 
 }
