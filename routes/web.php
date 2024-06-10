@@ -55,16 +55,7 @@ Route::prefix('/admin/applications')->middleware(['auth','admin'])->group(functi
 
     Route::get('opportunity/{opportunity}', [ApplicationController::class, 'show'])->name('application.opportunity.show');
 
-    Route::get('opportunity/{opportunity}/all', [ApplicationController::class, 'showAll'])->name('application.opportunity.show.all');
-    Route::get('opportunity/{opportunity}/new', [ApplicationController::class, 'showNew'])->name('application.opportunity.show.new');
-    Route::get('opportunity/{opportunity}/prescreen', [ApplicationController::class, 'showPrescreen'])->name('application.opportunity.show.prescreen');
-    Route::get('opportunity/{opportunity}/first-interview', [ApplicationController::class, 'showFirstInterview'])->name('application.opportunity.show.firstInterview');
-    Route::get('opportunity/{opportunity}/second-interview', [ApplicationController::class, 'showSecondInterview'])->name('application.opportunity.show.secondInterview');
-    Route::get('opportunity/{opportunity}/third-interview', [ApplicationController::class, 'showThirdInterview'])->name('application.opportunity.show.thirdInterview');
-    Route::get('opportunity/{opportunity}/offer', [ApplicationController::class, 'showOffer'])->name('application.opportunity.show.offer');
-    Route::get('opportunity/{opportunity}/accept', [ApplicationController::class, 'showAccept'])->name('application.opportunity.show.accept');
-    Route::get('opportunity/{opportunity}/reject', [ApplicationController::class, 'showReject'])->name('application.opportunity.show.reject');
-    Route::get('opportunity/{opportunity}/not-suitable', [ApplicationController::class, 'showNotSuitable'])->name('application.opportunity.show.notSuitable');
+    Route::get('opportunity/{opportunity}/{status}', [ApplicationController::class, 'getApplicationsByOpportunityByStatus'])->name('application.opportunity.show.status');
 
     Route::get('/opportunity/{opportunity_id}/{status}/applicant/{applicant_id}', [ApplicationController::class, 'applicantDetail'])->name('application.opportunity.applicant');
 });

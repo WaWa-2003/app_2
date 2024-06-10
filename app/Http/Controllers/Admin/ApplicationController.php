@@ -53,8 +53,12 @@ class ApplicationController extends Controller
         ]);
     }
 
-    private function getApplicationsByOpportunityByStatus($opportunity_id, $status = null, $applicant_id = null)
+    public function getApplicationsByOpportunityByStatus($opportunity_id, $status = null, $applicant_id = null)
     {
+        if ($status == "All"){
+            $status = null;
+        }
+
         $user = User::Find($applicant_id);
 
         $query = Application::with(['opportunity', 'user'])->where('opportunity_id', $opportunity_id);
@@ -74,67 +78,23 @@ class ApplicationController extends Controller
         }
         $countsStatusBarArray['All'] = Application::where('opportunity_id', $opportunity_id)->count();
 
+        if ($status == null){
+            $status = "All";
+        }
+
         return view('admin.application.show', [
             'applications' => $applications,
             'opportunity_id' => $opportunity_id,
             'user' => $user,
             'countsStatusBarArray' => $countsStatusBarArray,
+            'status' => $status,
+            'applicant_id' => $applicant_id,
         ]);
     }
 
     public function show($opportunity_id)
     {
         return $this->getApplicationsByOpportunityByStatus($opportunity_id);
-    }
-
-    public function showAll($opportunity_id)
-    {
-        return $this->getApplicationsByOpportunityByStatus($opportunity_id);
-    }
-
-    public function showNew($opportunity_id)
-    {
-        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'New');
-    }
-
-    public function showPrescreen($opportunity_id)
-    {
-        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Prescreen');
-    }
-
-    public function showFirstInterview($opportunity_id)
-    {
-        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'First Interview');
-    }
-
-    public function showSecondInterview($opportunity_id)
-    {
-        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Second Interview');
-    }
-
-    public function showThirdInterview($opportunity_id)
-    {
-        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Third Interview');
-    }
-
-    public function showOffer($opportunity_id)
-    {
-        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Offer');
-    }
-
-    public function showAccept($opportunity_id)
-    {
-        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Accept');
-    }
-
-    public function showReject($opportunity_id)
-    {
-        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Reject');
-    }
-
-    public function showNotSuitable($opportunity_id)
-    {
-        return $this->getApplicationsByOpportunityByStatus($opportunity_id, 'Not Suitable');
     }
 
 
