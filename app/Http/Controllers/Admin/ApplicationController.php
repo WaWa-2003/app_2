@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Application\Application;
+use App\Models\Application\Note;
 
 use App\Models\User;
 
@@ -103,57 +104,43 @@ class ApplicationController extends Controller
         return $this->getApplicationsByOpportunityByStatus($opportunity_id, $status, $applicant_id);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function noteStore(Request $request, $opportunity_id, $status, $applicant_id)
     {
-        //
+        $request->validate([
+            'application_id' => 'required|exists:applications,id',
+            'applicant_id' => 'required|exists:users,id',
+            'commenter_id' => 'required|exists:users,id',
+            'step' => 'required|string|max:255',
+            'rating' => 'required|string|max:255',
+            'note' => 'required|string|max:1000',
+        ]);
+
+        Note::create($request->all());
+        return redirect()->back()->with('messageNote', 'Note added successfully.');
+        // return $this->applicantDetail($opportunity_id, $status, $applicant_id)->with('messageNote', 'Note added successfully.');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function noteUpdate(Request $request, $id)
     {
-        //
-    }
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $request->validate([
+            'application_id' => 'required|exists:applications,id',
+            'applicant_id' => 'required|exists:users,id',
+            'commenter_id' => 'required|exists:users,id',
+            'step' => 'required|string|max:255',
+            'rating' => 'required|string|max:255',
+            'note' => 'required|string|max:1000',
+        ]);
+
+        $note->update($request->all());
+
+        return redirect()->route('application.opportunity.applicant')->with('messageNote', 'Note updated successfully.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function noteDestroy($id)
     {
-        //
+        $note->delete();
+
+        return redirect()->route('application.opportunity.applicant')->with('messageNote', 'Note deleted successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

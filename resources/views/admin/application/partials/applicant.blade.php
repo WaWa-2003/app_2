@@ -23,15 +23,23 @@
                 <div><strong>Current Job - </strong> {{ $user->current_job_position }}</div>
                 <div><strong>Expected Salary - </strong> {{ $user->expected_salary }}</div>
             </div>
+
             <div>
 
                 <h2 class="text-xl font-medium text-gray-900 dark:text-gray-100">
                     <strong>Note</strong>
                 </h2>
 
-                <form action="{{ route('opportunity.store') }}" method="POST" class="mt-6 space-y-6">
+                @if (session('messageNote'))
+                    <div id="message-note">
+                        {{ session('messageNote') }}
+                    </div>
+                @endif
+
+                <form
+                    action="{{ route('note.store', ['opportunity_id' => $application->opportunity->id, 'status' => $status, 'applicant_id' => $user->id]) }}"
+                    method="POST" class="mt-6 space-y-6">
                     @csrf
-                    {{-- route('note.create') --}}
 
                     <div class="hidden">
                         <x-input-label for="application_id" :value="__('Application Id')" />
@@ -114,5 +122,12 @@
     }
 </script>
 
-
-{{-- application_id applicant_id step commenter_id rating note --}}
+<script>
+    // Hide success message after 5 seconds
+    setTimeout(function() {
+        var messageNote = document.getElementById('message-note');
+        if (messageNote) {
+            messageNote.style.display = 'none';
+        }
+    }, 5000);
+</script>

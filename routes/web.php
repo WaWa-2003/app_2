@@ -3,7 +3,6 @@
 use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\ApplicationController;
 
 use App\Http\Controllers\OpportunityController;
 
@@ -14,18 +13,9 @@ use App\Http\Controllers\Applicant\ProfessionalInformationController;
 use App\Http\Controllers\Applicant\WishlistController;
 use App\Http\Controllers\Applicant\ApplyController;
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\ApplicationController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -49,15 +39,38 @@ Route::middleware(['auth','admin'])->prefix('/admin')->group(function () {
 
 
 Route::prefix('/admin/applications')->middleware(['auth','admin'])->group(function () {
-    Route::get('/', [ApplicationController::class, 'index'])->name('application.index');
 
-    Route::get('/{status}', [ApplicationController::class, 'getApplicationsByStatus'])->name('application.status');
+    Route::get(
+        '/',
+        [ApplicationController::class, 'index']
+        )->name('application.index');
 
-    Route::get('opportunity/{opportunity}', [ApplicationController::class, 'show'])->name('application.opportunity.show');
+    Route::get(
+        '/{status}',
+        [ApplicationController::class, 'getApplicationsByStatus']
+        )->name('application.status');
 
-    Route::get('opportunity/{opportunity}/{status}', [ApplicationController::class, 'getApplicationsByOpportunityByStatus'])->name('application.opportunity.show.status');
+    Route::get(
+        'opportunity/{opportunity}',
+        [ApplicationController::class, 'show']
+        )->name('application.opportunity.show');
 
-    Route::get('/opportunity/{opportunity_id}/{status}/applicant/{applicant_id}', [ApplicationController::class, 'applicantDetail'])->name('application.opportunity.applicant');
+    Route::get(
+        'opportunity/{opportunity}/{status}',
+        [ApplicationController::class, 'getApplicationsByOpportunityByStatus']
+        )->name('application.opportunity.show.status');
+
+    Route::get(
+        '/opportunity/{opportunity_id}/{status}/applicant/{applicant_id}',
+        [ApplicationController::class, 'applicantDetail']
+        )->name('application.opportunity.applicant');
+
+
+    Route::post(
+        '/opportunities/{opportunity_id}/{status}/applicant/{applicant_id}/notes',
+        [ApplicationController::class, 'noteStore']
+        )->name('note.store');
+
 });
 
 
@@ -90,5 +103,21 @@ Route::resource('others', OtherController::class);
 //     return view('applicant.index');
 // });
 
-
 Route::get('/professional-information', [ProfessionalInformationController::class, 'index'])->name('applicant.index');
+
+Route::prefix('/notes')->group(function () {
+    Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+
+        Route::get('/', [ApplicationController::class, 'index'])->name('note.index');
+        Route::get('/{note}', [ApplicationController::class, 'show'])->name('note.show');
+        Route::get('/{note}/edit', [ApplicationController::class, 'edit'])->name('note.edit');
+        Route::put('/{note}', [ApplicationController::class, 'update'])->name('note.update');
+        Route::patch('/{note}', [ApplicationController::class, 'update']);
+        Route::delete('/{note}', [ApplicationController::class, 'destroy'])->name('note.destroy');
+
+        Route::get('/create', [ApplicationController::class, 'create'])->name('note.create');
+        //Route::post('/', [ApplicationController::class, 'noteStore'])->name('note.store');
+    });
+});
+
+
